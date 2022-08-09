@@ -1,0 +1,32 @@
+.Modal-content {
+    width: 700px;
+    margin: auto;
+}
+
+.Modal-content-buttons--buttons {
+    display: flex;
+    justify-content: right;
+}
+
+.Modal-content--edit.active {
+    color: #0D6EFD !important;
+}
+
+.Modal-content--time {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Modal-content-invitados--content {
+    display: flex;
+    margin: 5px 0;
+}
+
+.Modal-content-invitados--content-removeBtn {
+    margin-left: 5px;
+}
+
+.Modal-content--save {
+    display: flex;
+    justify-content: center;
+}

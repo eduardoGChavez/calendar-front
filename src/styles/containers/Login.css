@@ -1,0 +1,13 @@
+.Login-content {
+    max-width: 500px;
+    margin: auto;
+}
+.Login-form-singin--forgotPassword-container {
+    justify-content: right;
+}
+.Login-form-singin--forgotPassword-content {
+    justify-content: right;
+}
+.Login-form-singin--terms-content:hover {
+    cursor: pointer;
+}
