@@ -1,3 +1,6 @@
 .Header-container {
     background-color: rgb(135, 135, 242);
 }
+.Header-container--image {
+    height: 50px;
+}

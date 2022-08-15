@@ -43,8 +43,6 @@ const Login = ({userData, setUserData}) => {
             alert('Es necesario ingresar una contraseña');
             return false;
         }
-
-        
         
         try {
             let config = {

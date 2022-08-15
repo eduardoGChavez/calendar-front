@@ -30,3 +30,42 @@
     display: flex;
     justify-content: center;
 }
+
+.Modal-Overlay-content {
+    z-index: 4;
+}
+
+.Modal-content{
+    position: absolute;
+    inset: 40px;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+    z-index: 4;
+}
+.Modal-content-personalizado.active .Modal-content{
+    inset: 0px 40px 40px 40px;
+}
+
+
+.modal---modal-content---3pwnC {
+    position: fixed !important;
+    z-index: 4;
+    top: 50%;
+    margin-left: -10%;
+}
+
+.Modal-content--time-timeStart,
+.Modal-content--time-timeEnd,
+.Modal-content-invitados--content-input-title,
+.Modal-content-invitados--content-input-organizer,
+.Modal-content-invitados--content {
+    padding: 5px;
+}
+.Modal-content-invitados--add,
+.Modal-content-encontrar-hueco--button {
+    margin: 5px;
+}
