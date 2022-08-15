@@ -69,3 +69,7 @@
 .Modal-content-encontrar-hueco--button {
     margin: 5px;
 }
+.Modal-content-invitados-content--textarea-description {
+    margin: 5px;
+    width: calc(100% - 10px);
+}

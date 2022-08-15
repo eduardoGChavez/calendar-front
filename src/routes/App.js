@@ -7,6 +7,7 @@ import Events from '../containers/Events';
 import UserContext from '../context/UserContext';
 import useUserState from '../hooks/useUserState'; 
 import { useState, useEffect } from 'react';
+import NotFound from '../components/NotFound';
 // import AppContext from '../context/AppContex';
 
 const App = () => {
@@ -25,12 +26,13 @@ const App = () => {
                   <Routes>
                       <Route exact path="/" element={<Home userData={userData}/>} />
                       <Route exact path="/login" element={<Login userData={userData} setUserData={setUserData}/>} />
+                      {/* <Route exact path="/" element={<Login userData={userData} setUserData={setUserData}/>} /> */}
                       <Route exact path="/events" element={<Events />} />
                       {/* <Route exact path="/checkout" element={<Checkout />} />
                       <Route exact path="/checkout/information" element={<Information />} />
                       <Route exact path="/checkout/payment" element={<Payment />} />
-                      <Route exact path="/checkout/success" element={<Success />} />
-                      <Route path='*' element={<NotFound />} /> */}
+                      <Route exact path="/checkout/success" element={<Success />} />*/}
+                      <Route path='*' element={<NotFound />} /> 
                   </Routes>
               </Layout>
           </BrowserRouter>

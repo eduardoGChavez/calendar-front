@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
 import '../styles/containers/Login.css'
+// import { Navigate } from "react-router-dom";
 
 
 const Login = ({userData, setUserData}) => {
@@ -55,10 +56,11 @@ const Login = ({userData, setUserData}) => {
             }
             let res = await fetch(`http://52.53.149.201:8000/users/${formSingin.correo}&${formSingin.contrasena}`, config);
             let resJson = await res.json();
-            // navigate('/');
+            // Navigate('/calendar');
             setUserData(resJson);
             addUser(resJson);
             localStorage.setItem("sesion", JSON.stringify(resJson));
+            alert("Sesión iniciada correctamente")
         } catch (error) {
             alert('Correo o contraseña incorrectos');
             console.log(error.message);
@@ -243,7 +245,7 @@ const Login = ({userData, setUserData}) => {
                                             onClick={handleClickCheckbox}/>
                                     <label  className="Login-form-singin--terms-content form-check-label"
                                             onClick={handleClickCheckbox}>
-                                        Estoy de acuerdo con los terminos
+                                        Estoy seguro de querer crear una sesión
                                     </label>
                                 </div>
 

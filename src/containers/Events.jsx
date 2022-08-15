@@ -40,6 +40,7 @@ const Events = () => {
     const [newEvent, setNewEvent] = useState();
     const sesionData = JSON.parse(localStorage.getItem('sesion'));
     const now = new Date();
+
     useEffect(() => {
         getEvents();
     }, []);
@@ -54,7 +55,7 @@ const Events = () => {
                 },
                 cache: 'default'
             }
-            let res = await fetch(`http://localhost:8000/events/${sesionData.email}`, config);
+            let res = await fetch(`http://52.53.149.201:8000/events/${sesionData.email}`, config);
             let resJson = await res.json();
 
             let fechaTiempoStart;
@@ -74,13 +75,11 @@ const Events = () => {
                     fechaStart = fechaTiempoStart[0].split("-");
                     tiempoStart = fechaTiempoStart[1].split(":");
                     resJson[i].start = new Date(parseInt(fechaStart[0]), (parseInt(fechaStart[1]) - 1), parseInt(fechaStart[2]), parseInt(tiempoStart[0]), parseInt(tiempoStart[1]), 0)
-                    console.log(resJson[i].start);
 
                     fechaTiempoEnd = resJson[i].end.split(" ");
                     fechaEnd = fechaTiempoEnd[0].split("-");
                     tiempoEnd = fechaTiempoEnd[1].split(":");
                     resJson[i].end = new Date(parseInt(fechaEnd[0]), (parseInt(fechaEnd[1]) - 1), parseInt(fechaEnd[2]), parseInt(tiempoEnd[0]), parseInt(tiempoEnd[1]), 0)
-                    console.log(resJson[i].end);
                 }
                 setEventsData(resJson);
             }
@@ -90,11 +89,23 @@ const Events = () => {
         }
     }
     
-    const removeEventData = (id) => {
-        eventsData.splice(eventsData.findIndex((element) => element.id === id), 1);
-    }
     const addEventData = (event) => {
         eventsData.push(event);
+    }
+    const updateEventData = (event) => {
+        // let arrayTmp = [...eventsData]; // copying the old datas array
+        // arrayTmp[arrayTmp.findIndex((element) => element.id === event.id)] = event;
+        // let arrayTmp = eventsData;
+        // arrayTmp.forEach((element) => {
+        //     if(element.id = event.id) {
+        //         element = event;
+        //         return false;
+        //     }
+        // });
+        // setEventsData(arrayTmp);
+    }
+    const removeEventData = (id) => {
+        eventsData.splice(eventsData.findIndex((element) => element.id === id), 1);
     }
 
 
@@ -134,7 +145,7 @@ const Events = () => {
                 startAccesor='start'
                 endAccessor='end'
                 // onSelectEvent={<ModalEvent/>}
-                onSelectSlot={handleSelect}s={{
+                onSelectSlot={(e) => handleSelect(e)}s={{
                     next: ">",
                     previous: "<",
                     today: "Hoy",
@@ -172,8 +183,10 @@ const Events = () => {
                             disabledEdit={disabledEdit}
                             setDisabledEdit={setDisabledEdit}
                             newEvent={newEvent} 
+                            addEventData={addEventData}
+                            updateEventData={updateEventData}
                             removeEventData={removeEventData}
-                            addEventData={addEventData}/>
+                            getEvents={getEvents}/>
             }
         </div>
     );

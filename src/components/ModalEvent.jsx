@@ -21,13 +21,15 @@ const ModalEvent = ({
     disabledEdit, 
     setDisabledEdit, 
     newEvent, 
+    addEventData,
+    updateEventData,
     removeEventData,
-    addEventData
+    getEvents
 }) => {
     const [formFields, setFormFields] = useState(eventSelected.guests);
     const [encontrarHueco, setEncontrarHueco] = useState();
     const [viewHueco, setViewHueco] = useState(false);
-    
+
     const handleDelete = async (e) => {
         e.preventDefault();
         
@@ -42,7 +44,6 @@ const ModalEvent = ({
             }
             let res = await fetch(`http://localhost:8000/events/${eventSelected.id}`, config);
             let resJson = await res.json();
-            console.log(resJson);
             if(resJson.messageType === "1"){
                 removeEventData(eventSelected.id);
                 alert(resJson.message);
@@ -67,7 +68,8 @@ const ModalEvent = ({
 
     const addFields = () => {
         let object = {
-            correo: ''
+            correo: '',
+            id: null,
         }
 
         setFormFields([...formFields, object]);
@@ -84,15 +86,8 @@ const ModalEvent = ({
         }
     }
 
-    // const handleSave = (e) => {
-    //     e.preventDefault();
-    //     setEventSelected({ ...eventSelected, guests: [...formFields] });
-    //     console.log(eventSelected);
-    // }
-
     const handleSave = async (e) => {
         e.preventDefault();
-        // console.log(eventSelected);
         
         if (eventSelected.title == "") {
             alert('Es necesario llenar todos los campos');
@@ -113,6 +108,9 @@ const ModalEvent = ({
         if ( newEvent ) {
             createNewEvent();
         }
+        else {
+            updateEvent();
+        }
     }
     const validateEmail = (email) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -132,10 +130,34 @@ const ModalEvent = ({
             }
             let res = await fetch("http://localhost:8000/events/", config);
             let resJson = await res.json();
-            console.log(resJson);
             if(resJson.messageType === "1"){
                 alert(resJson.message);
                 addEventData(eventSelected);
+                setShowModal(!showModal);
+            }
+        } catch (error) {
+            alert('Error inesperado: ' + error.message);
+        }
+    }
+
+    const updateEvent = async () => {
+        try {
+            let body = JSON.stringify(eventSelected);
+            let config = {
+                method: 'PUT',
+                headers: {
+                  Accept: 'application.json',
+                  'Content-Type': 'application/json'
+                },
+                body: body,
+                cache: 'default'
+            }
+            // console.log(eventSelected);
+            let res = await fetch(`http://localhost:8000/events/${eventSelected.id}`, config);
+            let resJson = await res.json();
+            if(resJson.messageType === "1"){
+                alert(resJson.message);
+                getEvents();
                 setShowModal(!showModal);
             }
         } catch (error) {
@@ -204,7 +226,12 @@ const ModalEvent = ({
                                     disabled= { disabledEdit }
                                     onChange={handleChangeFormInputs}
                                     value={eventSelected.title} /> */}
-                            <TextArea placeholder='Tell us more' />
+                            <TextArea   className="Modal-content-invitados-content--textarea-description"
+                                        placeholder='Descripción del evento' 
+                                        name="description"
+                                        disabled= { disabledEdit }
+                                        onChange={handleChangeFormInputs}
+                                        value={eventSelected.description} />
                         </div>
                         <div className="Modal-content-invitados--content-input-organizer">                         
                             <input  type="email"
@@ -289,14 +316,14 @@ const ModalEvent = ({
                                     <i className="fa-solid fa-circle-plus"></i>
                                     Nuevo invitado
                                 </button>
-                                { encontrarHueco &&
+                                {/* { encontrarHueco &&
                                     <button className="Modal-content-encontrar-hueco--button btn btn-primary"
                                         disabled= { disabledEdit }
                                         onClick={() => setViewHueco(!viewHueco)} 
                                         >
                                         Encontrar un hueco
                                     </button>
-                                }
+                                } */}
                             </div>
 
                             <div className="Modal-content--save">
