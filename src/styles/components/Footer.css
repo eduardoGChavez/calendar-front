@@ -1,7 +1,7 @@
 .Footer-container {
     background-color: brown;
     color: #ffffff;
-    position: absolute;
-    bottom: 0px;
+    /* position: absolute;
+    bottom: 0px; */
     width: 100%;
 }

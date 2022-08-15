@@ -1,8 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "../context/UserContext";
 import '../styles/containers/Login.css'
 
-const Login = () => {
+
+const Login = ({userData, setUserData}) => {
+    const {userState, addUser} =  useContext(UserContext);
     const [iniciar, setIniciar] = useState(true);
     const [termsChecked, setTermsChecked] = useState(false);
     const [formSingin, setFormSingin] = useState({
@@ -15,6 +18,10 @@ const Login = () => {
         contrasena: '',
         repContrasena: '',
     });
+
+    useEffect(() => {
+        console.log(userData);
+    }, [userData, userState])
 
     const handleChangeFormSingin = (e) => {
         const { name, value } = e.currentTarget;
@@ -36,6 +43,8 @@ const Login = () => {
             alert('Es necesario ingresar una contraseña');
             return false;
         }
+
+        
         
         try {
             let config = {
@@ -46,18 +55,18 @@ const Login = () => {
                 },
                 cache: 'default'
             }
-            let res = await fetch(`http://localhost:8000/users/${formSingin.correo}&${formSingin.contrasena}`, config);
+            let res = await fetch(`http://52.53.149.201:8000/users/${formSingin.correo}&${formSingin.contrasena}`, config);
             let resJson = await res.json();
             // navigate('/');
-            alert(`email: ${resJson.email} \n 
-                    id: ${resJson.id} \n 
-                    name: ${resJson.name} \n
-                    password: ${resJson.password}`);
-            console.log(formSingup);
+            setUserData(resJson);
+            addUser(resJson);
+            localStorage.setItem("sesion", JSON.stringify(resJson));
         } catch (error) {
             alert('Correo o contraseña incorrectos');
+            console.log(error.message);
         }
     }
+
     const validateEmail = (email) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return re.test(String(email).toLowerCase())
@@ -96,7 +105,7 @@ const Login = () => {
                 body: body,
                 cache: 'default'
             }
-            let res = await fetch("http://localhost:8000/users/", config);
+            let res = await fetch("http://52.53.149.201:8000/users/", config);
             let resJson = res.json();
             console.log(resJson);
             // navigate('/');
@@ -141,7 +150,7 @@ const Login = () => {
                 <div className="Login-form-container">
                     {iniciar ? (
                         <div className="Login-form-content-singin">
-                            <form className="Login-form-singin">
+                            <form className="Login-form-singin" onSubmit={handleSubmitSingin}>
                                 <div className="form-outline mb-4">
                                     <label className="form-label">Correo electrónico</label>
                                     <input  type="email" 

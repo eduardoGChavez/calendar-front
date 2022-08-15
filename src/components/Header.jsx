@@ -4,7 +4,9 @@ import '../styles/components/Header.css'
 const Header = () => {
     return (
         <div className="Header-container">
-            Hola, soy un header
+            <a href="/">
+                <img src='../assets/header/temporal-home.png' alt="Image banner header" />
+            </a>
         </div>
     );
 }

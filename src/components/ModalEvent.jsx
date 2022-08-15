@@ -12,8 +12,7 @@ import "../styles/components/ModalEvent.css"
 
 // import { CTimePicker } from '@coreui/react-pro'
 
-const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, testString }) => {
-    const [disabledEdit, setDisabledEdit] = useState(true);
+const ModalEvent = ({ showModal, setShowModal, eventSelected, setEventSelected, disabledEdit, setDisabledEdit, newEvent }) => {
     const [formFields, setFormFields] = useState(eventSelected.guests)
     // const [formFields, setFormFields] = useState([{correo: 'aaaa'}]);
     // console.log("---------------------------------------------------------")
@@ -28,10 +27,16 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
         console.log(eventSelected);
     }
 
-    const handleFormChange = (event, index) => {
+    const handleChangeFormInputs = (e) => {
+        const { name, value } = e.currentTarget;
+        setEventSelected({ ...eventSelected, [name]: value });
+    }
+
+    const handleChangeTimePicker = (event, index) => {
         let data = [...formFields];
         data[index][event.target.name] = event.target.value;
         setFormFields(data);
+        setEventSelected({ ...eventSelected, guests: formFields });
     }
 
     const addFields = () => {
@@ -48,10 +53,48 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
         setFormFields(data);
     }
 
-    const handleSave = (e) => {
+    // const handleSave = (e) => {
+    //     e.preventDefault();
+    //     setEventSelected({ ...eventSelected, guests: [...formFields] });
+    //     console.log(eventSelected);
+    // }
+
+    const handleSave = async (e) => {
         e.preventDefault();
-        setEventSelected({ ...eventSelected, guests: [...formFields] });
-        console.log(eventSelected);
+        // console.log(eventSelected);
+        
+        // // if (formSingup.nombre === "") {
+        // //     alert('Es necesario llenar todos los campos');
+        // //     return false;
+        // // }
+        // // if (validateEmail(formSingup.correo) === false) {
+        // //     alert('Ingrese el correo correctamente');
+        // //     return false;
+        // // }
+        // // if (formSingup.contrasena !== formSingup.repContrasena) {
+        // //     alert('Las contraseñas no coinciden.');
+        // //     return false;
+        // // }
+        
+        try {
+            let body = JSON.stringify(eventSelected);
+            let config = {
+                method: 'POST',
+                headers: {
+                  Accept: 'application.json',
+                  'Content-Type': 'application/json'
+                },
+                body: body,
+                cache: 'default'
+            }
+            let res = await fetch("http://localhost:8000/events/", config);
+            let resJson = await res.json();
+            console.log(resJson);
+            // navigate('/');
+            alert('¡Cuenta creada con éxito!');
+        } catch (error) {
+            alert('Error inesperado: ' + e.error);
+        }
     }
 
     return (
@@ -59,39 +102,40 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
             {/* <button onClick={toggleModal}>Open modal</button> */}
 
             <ReactModal
-                isOpen={showModal}
-                onRequestClose={handleModal}
+                isOpen={true}
+                onRequestClose={() => setShowModal(!showModal)}
                 contentLabel="My dialog"
             >
                 <div className="Modal-content">
                     <div className="Modal-content-buttons--buttons">
-                        <button className={disabledEdit ? "Modal-content--edit btn" : "Modal-content--edit active btn"} 
+                        {!newEvent && 
+                        [<button className={disabledEdit ? "Modal-content--edit btn" : "Modal-content--edit active btn"} 
                                 onClick={() => setDisabledEdit(!disabledEdit)}
                                 title="Editar evento" >
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-
+                            <i className="fa-solid fa-pen-to-square"></i>
+                        </button>,
+                    
                         <button className="Modal-content-buttons--delete btn"
                                 onClick={handleDelete}
                                 title="Eliminar evento" >
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-
+                            <i className="fa-solid fa-trash-can"></i>
+                        </button>]
+                        }
                         <button className="Modal-content-buttons--close btn btn-danger"
-                                onClick={handleModal}
+                                onClick={() => setShowModal(!setShowModal)}
                                 title="Cerrar ventana" >
-                            <i class="fa-solid fa-xmark"></i>
+                            <i className="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     
                     <div className="Modal-content--body">
                         <div>                         
                             <input  type="text"
-                                    placeholder="correo@ejemplo.com"
+                                    placeholder="Título evento"
                                     className="Modal-content-invitados--content-input-title form-control"
                                     name="title"
                                     disabled= { disabledEdit }
-                                    // onChange={event => handleFormChange(event, index)}
+                                    onChange={handleChangeFormInputs}
                                     value={eventSelected.title} />
                         </div>
                         <div>                         
@@ -100,6 +144,8 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
                                     className="Modal-content-invitados--content-input-organizer form-control"
                                     name="organizer"
                                     disabled= { true }
+                                    // disabled= { disabledEdit }
+                                    onChange={handleChangeFormInputs}
                                     value={eventSelected.organizer} />
                         </div>
                         <LocalizationProvider dateAdapter={AdapterDateFns} >
@@ -145,13 +191,13 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
                                             className="Modal-content-invitados--content-input form-control"
                                             name="correo"
                                             disabled= { disabledEdit }
-                                            onChange={event => handleFormChange(event, index)}
+                                            onChange={event => handleChangeTimePicker(event, index)}
                                             value={form.correo} />
                                     <button type="button" 
-                                            class="Modal-content-invitados--content-removeBtn btn btn-danger"
+                                            className="Modal-content-invitados--content-removeBtn btn btn-danger"
                                             disabled= { disabledEdit }
                                             onClick={ () => removeFields(index)} >
-                                        <i class="fa-solid fa-trash-can"></i>
+                                        <i className="fa-solid fa-trash-can"></i>
                                     </button>                                    
                                 </div>
                             )
@@ -160,7 +206,7 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
                                 <button className="btn btn-outline-primary"
                                         disabled= { disabledEdit }
                                         onClick={addFields} >
-                                    <i class="fa-solid fa-circle-plus"></i>
+                                    <i className="fa-solid fa-circle-plus"></i>
                                     Nuevo invitado
                                 </button>
                             </div>
@@ -169,7 +215,7 @@ const ModalEvent = ({ showModal, handleModal, eventSelected, setEventSelected, t
                                 <button className="Modal-content-save--button btn btn-primary"
                                         disabled= { disabledEdit }
                                         onClick={handleSave} >
-                                    <i class="fa-solid fa-floppy-disk"></i>
+                                    <i className="fa-solid fa-floppy-disk"></i>
                                     Guardar cambios
                                 </button>
                             </div>
