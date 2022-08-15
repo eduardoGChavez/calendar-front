@@ -42,7 +42,7 @@ const ModalEvent = ({
                 },
                 cache: 'default'
             }
-            let res = await fetch(`http://localhost:8000/events/${eventSelected.id}`, config);
+            let res = await fetch(`http://52.53.149.201:8000/events/${eventSelected.id}`, config);
             let resJson = await res.json();
             if(resJson.messageType === "1"){
                 removeEventData(eventSelected.id);
@@ -128,7 +128,7 @@ const ModalEvent = ({
                 body: body,
                 cache: 'default'
             }
-            let res = await fetch("http://localhost:8000/events/", config);
+            let res = await fetch("http://52.53.149.201:8000/events/", config);
             let resJson = await res.json();
             if(resJson.messageType === "1"){
                 alert(resJson.message);
@@ -153,7 +153,7 @@ const ModalEvent = ({
                 cache: 'default'
             }
             // console.log(eventSelected);
-            let res = await fetch(`http://localhost:8000/events/${eventSelected.id}`, config);
+            let res = await fetch(`http://52.53.149.201:8000/events/${eventSelected.id}`, config);
             let resJson = await res.json();
             if(resJson.messageType === "1"){
                 alert(resJson.message);
